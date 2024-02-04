@@ -45,26 +45,22 @@ def perform_operation(number_1, number_2, operation):
     :param operation: The arithmetic operation.
     :return: Result of the operation or an error message.
     """
+
+    def handle_condition(x, y, operation):
+        """Handles arithmetic operations avoiding division by zero."""
+        if x != 0 and y != 0:
+            return operations[operation](x, y)
+        else:
+            return handle_calculation_error(number_1, number_2, operation)
+
     operations = {
         "+": lambda x, y: x + y,
         "-": lambda x, y: x - y,
         "*": lambda x, y: x * y,
-        "/": lambda x, y: (
-            x / y
-            if y != 0
-            else handle_calculation_error(number_1, number_2, operation)
-        ),
-        "%": lambda x, y: (
-            x % y
-            if x != 0 and y != 0
-            else handle_calculation_error(number_1, number_2, operation)
-        ),
+        "/": lambda x, y: handle_condition(x, y, "/"),
+        "%": lambda x, y: handle_condition(x, y, "%"),
         "**": lambda x, y: x**y,
-        "//": lambda x, y: (
-            x // y
-            if y != 0
-            else handle_calculation_error(number_1, number_2, operation)
-        ),
+        "//": lambda x, y: handle_condition(x, y, "//"),
     }
 
     return operations.get(
