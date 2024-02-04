@@ -59,7 +59,7 @@ def perform_operation(number_1, number_2, operation):
         "*": lambda x, y: x * y,
         "/": lambda x, y: handle_condition(x, y, "/"),
         "%": lambda x, y: handle_condition(x, y, "%"),
-        "**": lambda x, y: x**y,
+        "**": lambda x, y: x ** y,
         "//": lambda x, y: handle_condition(x, y, "//"),
     }
 
