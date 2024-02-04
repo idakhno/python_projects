@@ -1,34 +1,97 @@
-def calculator():
+"""
+calculator.py
+
+Simple calculator module for basic arithmetic operations.
+Takes two numbers and an operation as input, then prints the result.
+
+Usage:
+1. Run the module, and enter the first number, second number, and operation.
+2. Supports addition (+), subtraction (-), multiplication (*), division (/),
+   modulo (%), exponentiation (**), and floor division (//).
+
+Example:
+Enter the first number: 10
+Enter the second number: 5
+Enter the operation: +
+Output: 15
+"""
+
+
+def handle_calculation_error(number_1, number_2, operation):
+    """
+    Handles calculation errors based on the provided numbers and operation.
+
+    Returns an error message if the calculation is undefined
+    or involves division by zero.
+
+    :param number_1: The first number.
+    :param number_2: The second number.
+    :param operation: The arithmetic operation.
+    :return: Error message or "Undefined" based on the calculation.
+    """
+    return (
+        "Undefined"
+        if not (number_1 and number_2) and operation in ("/", "%", "//")
+        else "Division by 0 is prohibited"
+    )
+
+
+def perform_operation(number_1, number_2, operation):
+    """
+    Performs the specified arithmetic operation on the provided numbers.
+
+    :param number_1: The first number.
+    :param number_2: The second number.
+    :param operation: The arithmetic operation.
+    :return: Result of the operation or an error message.
+    """
+    operations = {
+        "+": lambda x, y: x + y,
+        "-": lambda x, y: x - y,
+        "*": lambda x, y: x * y,
+        "/": lambda x, y: (
+            x / y
+            if y != 0
+            else handle_calculation_error(number_1, number_2, operation)
+        ),
+        "%": lambda x, y: (
+            x % y
+            if x != 0 and y != 0
+            else handle_calculation_error(number_1, number_2, operation)
+        ),
+        "**": lambda x, y: x**y,
+        "//": lambda x, y: (
+            x // y
+            if y != 0
+            else handle_calculation_error(number_1, number_2, operation)
+        ),
+    }
+
+    return operations.get(
+        operation, lambda x, y: f"Operation {operation} is not supported"
+    )(number_1, number_2)
+
+
+def calculate():
+    """
+    Performs basic arithmetic calculations based on user input.
+
+    Prompts the user to enter two numbers and an operation.
+    Supports addition (+), subtraction (-), multiplication (*), division (/),
+    modulo (%), exponentiation (**), and floor division (//).
+    Prints the result of the calculation.
+    """
     try:
-        # Input two numbers and an operation from the user
         number_1 = float(input("Enter the first number: "))
         number_2 = float(input("Enter the second number: "))
         operation = input("Enter the operation: ")
 
-        def handle_calculation_error():
-            # Returns "Undefined" when attempting division by 0 or operations involving 0; otherwise, returns "Division by 0 is prohibited"
-            return "Undefined" if not number_1 and not number_2 and operation in ('/', '%', '//') else "Division by 0 is prohibited"
+        result = perform_operation(number_1, number_2, operation)
 
-        # Dictionary of operations, where the key is the operation and the value is a lambda function performing the corresponding operation
-        operations = {
-            "+": lambda x, y: x + y,
-            "-": lambda x, y: x - y,
-            "*": lambda x, y: x * y,
-            "/": lambda x, y: x / y if y != 0 else handle_calculation_error(),
-            "%": lambda x, y: x % y if x != 0 and y != 0 else handle_calculation_error(),
-            "**": lambda x, y: x ** y,
-            "//": lambda x, y: x // y if y != 0 else handle_calculation_error(),
-        }
-
-        # Get the result of the operation or an error message if the operation is not supported
-        result = operations.get(operation, lambda x, y: f"Operation {operation} is not supported")(number_1, number_2)
-
-        # Print the result
         print(result)
 
     except ValueError as e:
-        # Handle input error (non-numeric input)
         print(f"Input error: {e}")
 
-# Call the calculator function
-calculator()
+
+calculate()
